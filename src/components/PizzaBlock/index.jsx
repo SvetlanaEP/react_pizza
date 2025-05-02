@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import logo from '../assets/img/pizza-logo.svg';
+import logo from '../../assets/img/pizza-logo.svg';
 
 export default function PizzaComponent(props) {
   const [pizzaCount, setPizzaCount] = useState(0);
