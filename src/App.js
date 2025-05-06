@@ -19,7 +19,7 @@ function App() {
           <Routes>
             <Route
               path='/'
-              element={<Home />}
+              element={<Home searchValue={searchValue} />}
             />
             <Route
               path='/cart'
