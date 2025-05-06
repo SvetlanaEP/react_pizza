@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
+
 import Sort from '../components/Sort';
 import Categories from '../components/Categories';
 import PizzaComponent from '../components/PizzaBlock';
 import PizzaSceleton from '../components/PizzaBlock/Sceleton';
 import { sortList } from '../components/Sort';
+import { Pagination } from '../components/Pagination';
 //import pizzas from './assets/pizzas.json';
 
 export const Home = ({ searchValue }) => {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [currentPage, setCurrentPage] = useState(1)
   const [categoryId, setCategoryId] = useState(0);
   const [selectedSort, setSelectedSort] = useState(0);
 
@@ -28,7 +30,7 @@ export const Home = ({ searchValue }) => {
     const category = categoryId > 0 ? `category=${categoryId}` : ``;
     const search = searchValue ? `search=${searchValue}` : ``;
     fetch(
-      `https://68149373225ff1af16294cea.mockapi.io/items?${category}&sortBy=${sortList[selectedSort].sortType}&order=desc&${search}`,
+      `https://68149373225ff1af16294cea.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortList[selectedSort].sortType}&order=desc&${search}`,
     )
       .then((res) => {
         return res.json();
@@ -38,10 +40,12 @@ export const Home = ({ searchValue }) => {
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
-    console.log(searchValue)
+    console.log(searchValue);
 
-    console.log(`https://68149373225ff1af16294cea.mockapi.io/items?${category}&${search}&sortBy=${sortList[selectedSort].sortType}&order=desc`)
-  }, [categoryId, selectedSort, searchValue]);
+    console.log(
+      `https://68149373225ff1af16294cea.mockapi.io/items?${category}&${search}&sortBy=${sortList[selectedSort].sortType}&order=desc`,
+    );
+  }, [categoryId, selectedSort, searchValue, currentPage]);
 
   return (
     <>
@@ -57,6 +61,7 @@ export const Home = ({ searchValue }) => {
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       <div className='content__items'>{isLoading ? skeletons : pizzas}</div>
+      <Pagination onChangePage={(number) => setCurrentPage(number)}/>
     </>
   );
 };
