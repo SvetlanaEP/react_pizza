@@ -36,15 +36,14 @@ export const Home = ({ searchValue }) => {
         return res.json();
       })
       .then((arr) => {
+        if (arr === 'Not found') {
+          arr = []
+        }
         setItems(arr);
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
-    console.log(searchValue);
 
-    console.log(
-      `https://68149373225ff1af16294cea.mockapi.io/items?${category}&${search}&sortBy=${sortList[selectedSort].sortType}&order=desc`,
-    );
   }, [categoryId, selectedSort, searchValue, currentPage]);
 
   return (
