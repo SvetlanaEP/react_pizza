@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-
+import { useSelector, useDispatch } from 'react-redux';
 
 import Sort from '../components/Sort';
 import Categories from '../components/Categories';
@@ -8,15 +8,27 @@ import PizzaSceleton from '../components/PizzaBlock/Sceleton';
 import { sortList } from '../components/Sort';
 import { Pagination } from '../components/Pagination';
 import { SearchContext } from '../App';
+import { setCategoryId, setSort } from '../redux/slices/filterSlice';
 //import pizzas from './assets/pizzas.json';
 
 export const Home = () => {
-  const {searchValue} = useContext(SearchContext)
+  const dispatch = useDispatch();
+  const categoryId = useSelector((state) => state.filter.categoryId);
+  const selectedSort = useSelector((state) => state.filter.sort);
+  const { searchValue } = useContext(SearchContext);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1)
-  const [categoryId, setCategoryId] = useState(0);
-  const [selectedSort, setSelectedSort] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  //const [selectedSort, setSelectedSort] = useState(0);
+
+  const onClickCategory = (id) => {
+    dispatch(setCategoryId(id));
+  };
+
+  const onClickSort = (id) => {
+    dispatch(setSort(id));
+  };
 
   const pizzas = items.map((pizza) => (
     <PizzaComponent
@@ -39,13 +51,12 @@ export const Home = () => {
       })
       .then((arr) => {
         if (arr === 'Not found') {
-          arr = []
+          arr = [];
         }
         setItems(arr);
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
-
   }, [categoryId, selectedSort, searchValue, currentPage]);
 
   return (
@@ -53,16 +64,16 @@ export const Home = () => {
       <div className='content__top'>
         <Categories
           value={categoryId}
-          onClickCategory={(index) => setCategoryId(index)}
+          onClickCategory={onClickCategory}
         />
         <Sort
           value={selectedSort}
-          onClickSort={(index) => setSelectedSort(index)}
+          onClickSort={onClickSort}
         />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       <div className='content__items'>{isLoading ? skeletons : pizzas}</div>
-      <Pagination onChangePage={(number) => setCurrentPage(number)}/>
+      <Pagination onChangePage={(number) => setCurrentPage(number)} />
     </>
   );
 };
