@@ -1,24 +1,40 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
-  export const sortList = [
-    { name: 'популярности', sortType: 'rating' },
-    { name: 'цене', sortType: 'price' },
-    {name: 'алфавиту', sortType: 'title'},
-  ];
+export const sortList = [
+  { name: 'популярности', sortType: 'rating' },
+  { name: 'цене', sortType: 'price' },
+  { name: 'алфавиту', sortType: 'title' },
+];
 
 export default function Sort({ value, onClickSort }) {
   const [isVisible, setIsVisible] = useState(false);
-
-  const sortRef = useRef()
-  console.log(sortRef)
+  const sortRef = useRef();
 
   const onClickSortItem = (index) => {
     onClickSort(index);
     setIsVisible(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const path = event.composedPath();
+      if (sortRef.current && !path.includes(sortRef.current)) {
+        setIsVisible(false);
+      }
+    };
+  
+    document.body.addEventListener('click', handleClickOutside);
+  
+    return () => {
+      document.body.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div ref={sortRef} className='sort'>
+    <div
+      ref={sortRef}
+      className='sort'
+    >
       <div className='sort__label'>
         <svg
           width='10'
