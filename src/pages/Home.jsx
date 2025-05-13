@@ -9,17 +9,18 @@ import PizzaSceleton from '../components/PizzaBlock/Sceleton';
 import { sortList } from '../components/Sort';
 import { Pagination } from '../components/Pagination';
 import { SearchContext } from '../App';
-import { setCategoryId, setSort } from '../redux/slices/filterSlice';
+import { setCategoryId, setSort, setCurrentPage } from '../redux/slices/filterSlice';
 //import pizzas from './assets/pizzas.json';
 
 export const Home = () => {
   const dispatch = useDispatch();
   const categoryId = useSelector((state) => state.filter.categoryId);
   const selectedSort = useSelector((state) => state.filter.sort);
+  const currentPage = useSelector((state) => state.filter.currentPage);
   const { searchValue } = useContext(SearchContext);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
 
   //const [selectedSort, setSelectedSort] = useState(0);
 
@@ -29,6 +30,10 @@ export const Home = () => {
 
   const onClickSort = (id) => {
     dispatch(setSort(id));
+  };
+
+  const onClickPage = (page) => {
+    dispatch(setCurrentPage(page));
   };
 
   const pizzas = items.map((pizza) => (
@@ -82,7 +87,7 @@ export const Home = () => {
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       <div className='content__items'>{isLoading ? skeletons : pizzas}</div>
-      <Pagination onChangePage={(number) => setCurrentPage(number)} />
+      <Pagination onChangePage={onClickPage} />
     </>
   );
 };
