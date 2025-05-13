@@ -1,15 +1,28 @@
 import React, { useState } from 'react';
 import logo from '../../assets/img/pizza-logo.svg';
+import { useSelector, useDispatch } from 'react-redux';
+import { addItem } from '../../redux/slices/cartSlice';
 
-export default function PizzaComponent(props) {
-  const [pizzaCount, setPizzaCount] = useState(0);
+export default function PizzaComponent({ id, title, price, sizes, types, rating }) {
+  const dispatch = useDispatch();
+
+  const cartItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id));
+  const addedCount = cartItem ? cartItem.count : 0;
   const [sizeActive, setSizeActive] = useState(0);
   const [typeActive, setTypeActive] = useState(0);
 
-  const typeNames = ['тонкое', 'традиционное']
+  const typeNames = ['тонкое', 'традиционное'];
 
   const onClickAddButton = () => {
-    setPizzaCount(pizzaCount + 1);
+    const item = {
+      id,
+      title,
+      price,
+      logo,
+      type: typeNames[typeActive],
+      size: sizeActive,
+    };
+    dispatch(addItem(item));
   };
 
   return (
@@ -19,22 +32,23 @@ export default function PizzaComponent(props) {
         src={logo}
         alt='Pizza'
       />
-      <h4 className='pizza-block__title'>{props.title}</h4>
+      <h4 className='pizza-block__title'>{title}</h4>
       <div className='pizza-block__selector'>
         <ul>
-          {props.types.map((typeIndex) => (
+          {types.map((typeIndex) => (
             <li
               key={typeIndex}
               className={typeActive === typeIndex ? 'active' : ''}
               onClick={() => {
-                setTypeActive(typeIndex)
+                setTypeActive(typeIndex);
               }}
-            >{typeNames[typeIndex]}
+            >
+              {typeNames[typeIndex]}
             </li>
           ))}
         </ul>
         <ul>
-          {props.sizes.map((size, index) => (
+          {sizes.map((size, index) => (
             <li
               key={index}
               className={sizeActive === index ? 'active' : ''}
@@ -46,7 +60,7 @@ export default function PizzaComponent(props) {
         </ul>
       </div>
       <div className='pizza-block__bottom'>
-        <div className='pizza-block__price'>от {props.price} ₽</div>
+        <div className='pizza-block__price'>от {price} ₽</div>
         <button
           onClick={onClickAddButton}
           className='button button--outline button--add'
@@ -64,7 +78,7 @@ export default function PizzaComponent(props) {
             />
           </svg>
           <span>Добавить</span>
-          <i>{pizzaCount}</i>
+          {addedCount > 0 && <i>{addedCount}</i>}
         </button>
       </div>
     </div>
