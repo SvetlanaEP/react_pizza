@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
   export const sortList = [
     { name: 'популярности', sortType: 'rating' },
@@ -9,13 +9,16 @@ import React, { useState } from 'react';
 export default function Sort({ value, onClickSort }) {
   const [isVisible, setIsVisible] = useState(false);
 
+  const sortRef = useRef()
+  console.log(sortRef)
+
   const onClickSortItem = (index) => {
     onClickSort(index);
     setIsVisible(false);
   };
 
   return (
-    <div className='sort'>
+    <div ref={sortRef} className='sort'>
       <div className='sort__label'>
         <svg
           width='10'
