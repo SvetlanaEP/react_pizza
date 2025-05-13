@@ -4,8 +4,8 @@ import { Search } from './Search';
 import { useSelector } from 'react-redux';
 
 export default function HeaderComponent() {
-  const { items, totalPrice } = useSelector((state) => state.cart);
-  const itemsCount = 0//items.length;
+  const { totalCount, totalPrice } = useSelector((state) => state.cart);
+
   return (
     <div className='header'>
       <div className='container'>
@@ -59,7 +59,7 @@ export default function HeaderComponent() {
                 strokeLinejoin='round'
               />
             </svg>
-            <span>{itemsCount}</span>
+            <span>{totalCount}</span>
           </Link>
         </div>
       </div>
