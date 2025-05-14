@@ -28,16 +28,30 @@ const cartSlice = createSlice({
       state.totalCount++;
     },
     removeItem(state, action) {
-      state.items = state.items.filter(
+      const findItem = state.items.find(
         (obj) =>
-          !(
-            obj.id === action.payload.id &&
-            obj.type === action.payload.type &&
-            obj.size === action.payload.size
-          ),
+          obj.id === action.payload.id &&
+          obj.type === action.payload.type &&
+          obj.size === action.payload.size,
       );
-      state.totalPrice -= action.payload.price;
-      state.totalCount -= action.payload.count;
+
+      if (action.payload.count === 0) {
+        state.items = state.items.filter(
+          (obj) =>
+            !(
+              obj.id === action.payload.id &&
+              obj.type === action.payload.type &&
+              obj.size === action.payload.size
+            ),
+        );
+        state.totalPrice -= action.payload.price;
+        state.totalCount -= findItem.count;
+      } else {
+        
+        state.totalPrice -= action.payload.price;
+        state.totalCount -= (findItem.count-action.payload.count);
+        findItem.count = action.payload.count;
+      }
     },
     clearItem(state) {
       state.items = [];
