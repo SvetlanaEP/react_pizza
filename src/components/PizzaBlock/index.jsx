@@ -12,7 +12,7 @@ export default function PizzaComponent({ id, title, price, sizes, types, rating 
 
   const cartItem = useSelector((state) =>
     state.cart.items.find(
-      (obj) => obj.id === id && obj.type === typeNames[typeActive] && obj.size === sizeActive,
+      (obj) => obj.id === id && obj.type === typeNames[typeActive] && obj.size === sizes[sizeActive],
     ),
   );
   const addedCount = cartItem ? cartItem.count : 0;
@@ -24,7 +24,7 @@ export default function PizzaComponent({ id, title, price, sizes, types, rating 
       price,
       logo,
       type: typeNames[typeActive],
-      size: sizeActive,
+      size: sizes[sizeActive],
     };
     dispatch(addItem(item));
   };
