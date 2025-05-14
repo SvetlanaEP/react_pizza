@@ -5,13 +5,17 @@ import { addItem } from '../../redux/slices/cartSlice';
 
 export default function PizzaComponent({ id, title, price, sizes, types, rating }) {
   const dispatch = useDispatch();
+  const typeNames = ['тонкое', 'традиционное'];
 
-  const cartItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id));
-  const addedCount = cartItem ? cartItem.count : 0;
   const [sizeActive, setSizeActive] = useState(0);
   const [typeActive, setTypeActive] = useState(0);
 
-  const typeNames = ['тонкое', 'традиционное'];
+  const cartItem = useSelector((state) =>
+    state.cart.items.find(
+      (obj) => obj.id === id && obj.type === typeNames[typeActive] && obj.size === sizeActive,
+    ),
+  );
+  const addedCount = cartItem ? cartItem.count : 0;
 
   const onClickAddButton = () => {
     const item = {
