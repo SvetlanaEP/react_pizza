@@ -5,7 +5,8 @@ import { CartItem } from '../components/CartItem';
 
 export const Cart = () => {
   const dispatch = useDispatch();
-  const items = useSelector((state) => state.cart.items);
+  const { items, totalPrice, totalCount } = useSelector((state) => state.cart);
+
   return (
     <div className='container container--cart'>
       <div className='cart'>
@@ -92,6 +93,7 @@ export const Cart = () => {
                 count={item.count}
                 price={item.price * item.count}
                 type={item.type}
+                size={item.size}
               />
             ))
           ) : (
@@ -102,11 +104,11 @@ export const Cart = () => {
           <div className='cart__bottom-details'>
             <span>
               {' '}
-              Всего пицц: <b>3 шт.</b>{' '}
+              Всего пицц: <b>{totalCount} шт.</b>{' '}
             </span>
             <span>
               {' '}
-              Сумма заказа: <b>900 ₽</b>{' '}
+              Сумма заказа: <b>{totalPrice} ₽</b>{' '}
             </span>
           </div>
           <div className='cart__bottom-buttons'>
