@@ -9,8 +9,8 @@ export const Cart = () => {
   const { items, totalPrice, totalCount } = useSelector((state) => state.cart);
 
   const onClickCart = () => {
-    dispatch(clearItem())
-  }
+    dispatch(clearItem());
+  };
 
   return (
     <div className='container container--cart'>
@@ -93,6 +93,7 @@ export const Cart = () => {
           {items.length > 0 ? (
             items.map((item) => (
               <CartItem
+                id={item.id}
                 key={item.id}
                 title={item.title}
                 count={item.count}
