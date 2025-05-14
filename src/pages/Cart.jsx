@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { CartItem } from '../components/CartItem';
 import { clearItem } from '../redux/slices/cartSlice';
+import { CartEmpty } from '../components/CartEmpty';
 
 export const Cart = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,9 @@ export const Cart = () => {
     dispatch(clearItem());
   };
 
+  if (items.length === 0) {
+    return <CartEmpty />;
+  }
   return (
     <div className='container container--cart'>
       <div className='cart'>
@@ -90,21 +94,17 @@ export const Cart = () => {
           </div>
         </div>
         <div className='content__items'>
-          {items.length > 0 ? (
-            items.map((item) => (
-              <CartItem
-                id={item.id}
-                key={item.id}
-                title={item.title}
-                count={item.count}
-                price={item.price * item.count}
-                type={item.type}
-                size={item.size}
-              />
-            ))
-          ) : (
-            <h2>Корзина пустая</h2>
-          )}
+          {items.map((item) => (
+            <CartItem
+              id={item.id}
+              key={item.id}
+              title={item.title}
+              count={item.count}
+              price={item.price * item.count}
+              type={item.type}
+              size={item.size}
+            />
+          ))}
         </div>
         <div className='cart__bottom'>
           <div className='cart__bottom-details'>
