@@ -41,7 +41,7 @@ export const Home = () => {
     dispatch(setCurrentPage(page));
   };
 
-  const fetchPizzas = () => {
+  const fetchPizzas = async () => {
     setIsLoading(true);
     const category = categoryId > 0 ? `category=${categoryId}` : ``;
     const search = searchValue ? `search=${searchValue}` : ``;
@@ -58,14 +58,18 @@ export const Home = () => {
         setItems(arr);
         setIsLoading(false);
       });*/
-    axios
-      .get(
+    try {
+      const res = await axios.get(
         `https://68149373225ff1af16294cea.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortList[selectedSort].sortType}&order=desc&${search}`,
-      )
-      .then((res) => {
-        setItems(res.data);
-        setIsLoading(false);
-      });
+      );
+      setItems(res.data);
+    } catch (error) {
+      if (error.status === 404) {
+        setItems([]);
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
   useEffect(() => {
     if (isMounted.current) {
@@ -92,8 +96,7 @@ export const Home = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
 
-      fetchPizzas();
-
+    fetchPizzas();
   }, [categoryId, selectedSort, searchValue, currentPage]);
 
   const pizzas = items.map((pizza) => (
