@@ -117,7 +117,13 @@ export const Home = () => {
         />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
-      <div className='content__items'>{status === 'loading' ? skeletons : pizzas}</div>
+      {status === 'error' ? (
+        <div className='content'>
+          <h2> Ничего не найдено 😕 </h2>
+        </div>
+      ) : (
+        <div className='content__items'>{status === 'loading' ? skeletons : pizzas}</div>
+      )}
       <Pagination onChangePage={onClickPage} />
     </>
   );
