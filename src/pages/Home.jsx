@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+
 import { useSelector, useDispatch } from 'react-redux';
 
 import Sort from '../components/Sort';
@@ -12,6 +12,7 @@ import { sortList } from '../components/Sort';
 import { Pagination } from '../components/Pagination';
 import { SearchContext } from '../App';
 import { setCategoryId, setSort, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
+import { fetchPizzas } from '../redux/slices/pizzasSlice';
 //import pizzas from './assets/pizzas.json';
 
 export const Home = () => {
@@ -22,11 +23,10 @@ export const Home = () => {
   const categoryId = useSelector((state) => state.filter.categoryId);
   const selectedSort = useSelector((state) => state.filter.sort);
   const currentPage = useSelector((state) => state.filter.currentPage);
+  const items = useSelector((state) => state.pizzas.items)
   const { searchValue } = useContext(SearchContext);
-  const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   // const [currentPage, setCurrentPage] = useState(1);
-
   //const [selectedSort, setSelectedSort] = useState(0);
 
   const onClickCategory = (id) => {
@@ -41,10 +41,11 @@ export const Home = () => {
     dispatch(setCurrentPage(page));
   };
 
-  const fetchPizzas = async () => {
+  const getPizzas = async () => {
     setIsLoading(true);
     const category = categoryId > 0 ? `category=${categoryId}` : ``;
     const search = searchValue ? `search=${searchValue}` : ``;
+    const sortBy = sortList[selectedSort].sortType
     /* fetch(
       `https://68149373225ff1af16294cea.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortList[selectedSort].sortType}&order=desc&${search}`,
     )
@@ -59,14 +60,14 @@ export const Home = () => {
         setIsLoading(false);
       });*/
     try {
-      const res = await axios.get(
-        `https://68149373225ff1af16294cea.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortList[selectedSort].sortType}&order=desc&${search}`,
-      );
-      setItems(res.data);
+      dispatch(fetchPizzas({
+        category,
+        search,
+        sortBy,
+        currentPage
+      }))
     } catch (error) {
-      if (error.status === 404) {
-        setItems([]);
-      }
+      console.log(error)
     } finally {
       setIsLoading(false);
     }
@@ -96,7 +97,7 @@ export const Home = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    fetchPizzas();
+    getPizzas();
   }, [categoryId, selectedSort, searchValue, currentPage]);
 
   const pizzas = items.map((pizza) => (
