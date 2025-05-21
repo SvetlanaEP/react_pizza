@@ -23,9 +23,9 @@ export const Home = () => {
   const categoryId = useSelector((state) => state.filter.categoryId);
   const selectedSort = useSelector((state) => state.filter.sort);
   const currentPage = useSelector((state) => state.filter.currentPage);
-  const items = useSelector((state) => state.pizzas.items)
+  const { items, status } = useSelector((state) => state.pizzas);
   const { searchValue } = useContext(SearchContext);
-  const [isLoading, setIsLoading] = useState(true);
+
   // const [currentPage, setCurrentPage] = useState(1);
   //const [selectedSort, setSelectedSort] = useState(0);
 
@@ -42,10 +42,9 @@ export const Home = () => {
   };
 
   const getPizzas = async () => {
-    setIsLoading(true);
     const category = categoryId > 0 ? `category=${categoryId}` : ``;
     const search = searchValue ? `search=${searchValue}` : ``;
-    const sortBy = sortList[selectedSort].sortType
+    const sortBy = sortList[selectedSort].sortType;
     /* fetch(
       `https://68149373225ff1af16294cea.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortList[selectedSort].sortType}&order=desc&${search}`,
     )
@@ -59,18 +58,14 @@ export const Home = () => {
         setItems(arr);
         setIsLoading(false);
       });*/
-    try {
-      dispatch(fetchPizzas({
+    dispatch(
+      fetchPizzas({
         category,
         search,
         sortBy,
-        currentPage
-      }))
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setIsLoading(false);
-    }
+        currentPage,
+      }),
+    );
   };
   useEffect(() => {
     if (isMounted.current) {
@@ -122,7 +117,7 @@ export const Home = () => {
         />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
-      <div className='content__items'>{isLoading ? skeletons : pizzas}</div>
+      <div className='content__items'>{status === 'loading' ? skeletons : pizzas}</div>
       <Pagination onChangePage={onClickPage} />
     </>
   );
