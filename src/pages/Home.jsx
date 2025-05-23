@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef} from 'react';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,7 +10,6 @@ import PizzaComponent from '../components/PizzaBlock';
 import PizzaSceleton from '../components/PizzaBlock/Sceleton';
 import { sortList } from '../components/Sort';
 import { Pagination } from '../components/Pagination';
-import { SearchContext } from '../App';
 import { setCategoryId, setSort, setCurrentPage, setFilters, selectFilter } from '../redux/slices/filterSlice';
 import { fetchPizzas, selectPizzasData } from '../redux/slices/pizzasSlice';
 //import pizzas from './assets/pizzas.json';
@@ -21,9 +20,8 @@ export const Home = () => {
   const isMounted = useRef(false);
 
 
-  const {categoryId, selectedSort,currentPage } = useSelector(selectFilter);
+  const {categoryId, selectedSort,currentPage, searchValue } = useSelector(selectFilter);
   const { items, status } = useSelector(selectPizzasData);
-  const { searchValue } = useContext(SearchContext);
 
   // const [currentPage, setCurrentPage] = useState(1);
   //const [selectedSort, setSelectedSort] = useState(0);
