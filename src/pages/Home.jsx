@@ -11,8 +11,8 @@ import PizzaSceleton from '../components/PizzaBlock/Sceleton';
 import { sortList } from '../components/Sort';
 import { Pagination } from '../components/Pagination';
 import { SearchContext } from '../App';
-import { setCategoryId, setSort, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
-import { fetchPizzas } from '../redux/slices/pizzasSlice';
+import { setCategoryId, setSort, setCurrentPage, setFilters, selectFilter } from '../redux/slices/filterSlice';
+import { fetchPizzas, selectPizzasData } from '../redux/slices/pizzasSlice';
 //import pizzas from './assets/pizzas.json';
 
 export const Home = () => {
@@ -20,10 +20,9 @@ export const Home = () => {
   const dispatch = useDispatch();
   const isMounted = useRef(false);
 
-  const categoryId = useSelector((state) => state.filter.categoryId);
-  const selectedSort = useSelector((state) => state.filter.sort);
-  const currentPage = useSelector((state) => state.filter.currentPage);
-  const { items, status } = useSelector((state) => state.pizzas);
+
+  const {categoryId, selectedSort,currentPage } = useSelector(selectFilter);
+  const { items, status } = useSelector(selectPizzasData);
   const { searchValue } = useContext(SearchContext);
 
   // const [currentPage, setCurrentPage] = useState(1);

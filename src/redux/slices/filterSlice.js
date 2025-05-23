@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   categoryId: 0,
   currentPage: 1,
-  sort: 0,
+  selectedSort: 0,
 };
 
 const filterSlice = createSlice({
@@ -14,7 +14,7 @@ const filterSlice = createSlice({
       state.categoryId = action.payload;
     },
     setSort(state, action) {
-      state.sort = action.payload;
+      state.selectedSort = action.payload;
     },
     setCurrentPage(state, action) {
       state.currentPage = action.payload;
@@ -22,10 +22,12 @@ const filterSlice = createSlice({
     setFilters(state, action) {
       state.categoryId = Number(action.payload.categoryId);
       state.currentPage = Number(action.payload.currentPage);
-      state.sort = Number(action.payload.selectedSort);
+      state.selectedSort = Number(action.payload.selectedSort);
     },
   },
 });
+
+export const selectFilter = (state) => state.filter
 
 export const { setCategoryId, setSort, setCurrentPage, setFilters } = filterSlice.actions;
 
