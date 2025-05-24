@@ -1,6 +1,6 @@
 import React, { useEffect, useRef} from 'react';
 import qs from 'qs';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -93,10 +93,12 @@ export const Home = () => {
   }, [categoryId, selectedSort, searchValue, currentPage]);
 
   const pizzas = items.map((pizza) => (
+    <Link key={pizza.id} to={`/pizza/${pizza.id}`}>
     <PizzaComponent
-      key={pizza.id}
       {...pizza}
     />
+    </Link>
+    
   ));
 
   const skeletons = [...new Array(6)].map((_, index) => <PizzaSceleton key={index} />);
